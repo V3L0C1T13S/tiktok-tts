@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const axios = require('axios');
 let BASE_URL = 'https://api16-normal-v6.tiktokv.com/media/api/text/speech/invoke';
 
@@ -51,7 +51,7 @@ async function createAudioFromText(text = null, fileName = 'audio', text_speaker
         const status_code = result?.data?.status_code;
         if (status_code !== 0) return handleStatusError(status_code);
         const encoded_voice = result?.data?.data?.v_str;
-        fs.writeFileSync(`${fileName}.mp3`, Buffer.from(encoded_voice, 'base64'));
+        await fs.writeFile(`${fileName}.mp3`, Buffer.from(encoded_voice, 'base64'));
     } catch (err) {
         throw new Error(`tiktok-tts ${err}`);
     }
